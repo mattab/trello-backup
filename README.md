@@ -1,6 +1,6 @@
 Trello-Backup
 =============
-[Trello-Backup](https://github.com/matthacks/trello-backup) is a simple script that Backups all your [Trello.com](https://trello.com/) boards and cards, one JSON file per board, for total peace of mind. This is a simple php script which uses the Trello.com API to securely fetch all your boards and store them on your computer.
+[Trello-Backup](https://github.com/mattab/trello-backup) is a simple script that Backups all your [Trello.com](https://trello.com/) boards and cards, one JSON file per board, for total peace of mind. This is a simple php script which uses the Trello.com API to securely fetch all your boards and store them on your computer.
 
 Requirements
 ---
