@@ -10,7 +10,7 @@ This is a simple php script which requires PHP installed on your system:
 Usage
 ---
 - Download the code in a 'trello-backup' directory with:
-	`git clone https://github.com/matthacks/trello-backup.git trello-backup`
+	`git clone https://github.com/mattab/trello-backup.git trello-backup`
 - With your browser go to: [https://trello.com/1/appKey/generate](https://trello.com/1/appKey/generate) - It will give you your public 'Key' for Trello API.
 - Edit the file trello-backup/config.php and set `$key` to your 'Key', and set `$username` to your Trello.com username (without the at sign `@`)
 - Then Run the script:
