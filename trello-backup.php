@@ -2,7 +2,7 @@
 /**
  * Backups all your Trello boards (including cards, checklists, comments, etc.) as one JSON file per board.
  * 
- * See: https://github.com/matthab/trello-backup
+ * See: https://github.com/mattab/trello-backup
  * 
  * License: GPL v3 or later (I'm using that Wordpress function below and WP is released under GPL)
  */
