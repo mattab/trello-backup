@@ -48,7 +48,7 @@ foreach($boardsInfo as $board) {
 
     $boards[$board->id] = (object) array(
         "name" => $board->name,
-        "orgName" => (isset($organizations[$board->idOrganization])? $organizations[$board->idOrganization] : 'My Boards'),
+        "orgName" => (isset($organizations[$board->idOrganization])? $organizations[$board->idOrganization] : ''),
         "closed" => (($board->closed) ? true : false)
     );
 }
@@ -58,8 +58,12 @@ echo count($boards) . " boards to backup... \n";
 // 4) Backup now!
 foreach($boards as $id => $board) {
     $url_individual_board_json = "https://api.trello.com/1/boards/$id?actions=all&actions_limit=1000&cards=all&lists=all&members=all&member_fields=all&checklists=all&fields=all&key=$key&token=$application_token";
-    $filename = './trello-'.(($board->closed)?'CLOSED-':'').'org-'.sanitize_file_name($board->orgName).'-board-'.sanitize_file_name($board->name).'.json';
-    echo "recording ".(($board->closed)?'the closed ':'')."board '$board->name' with organization '$board->orgName' in filename $filename...\n";
+    $filename = './trello' 
+		. (($board->closed) ? '-CLOSED' : '') 
+		. (!empty($board->orgName) ? '-org-' . sanitize_file_name($board->orgName) : '' ) 
+		. '-board-' . sanitize_file_name($board->name) 
+		. '.json';
+    echo "recording ".(($board->closed)?'the closed ':'')."board '".$board->name."' with organization '".$board->orgName."' in filename $filename...\n";
     $response = file_get_contents($url_individual_board_json);
     $decoded = json_decode($response);
     if(empty($decoded)) {

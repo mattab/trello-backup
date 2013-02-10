@@ -1,2 +1,3 @@
 *.json
 .idea
+config.php
