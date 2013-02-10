@@ -18,7 +18,7 @@ if(strlen($application_token) < 30) {
     die("Go to this URL with your web browser (eg. Firefox) to authorize your Trello Backups to run:\n$url_token\n");
 }
 
-// 1) Fetch all Trello Boards and Organizations
+// 1) Fetch all Trello Boards
 $application_token = trim($application_token);
 $url_boards = "https://api.trello.com/1/members/$username/boards?&key=$key&token=$application_token";
 $response = file_get_contents($url_boards);
@@ -26,39 +26,36 @@ $boardsInfo = json_decode($response);
 if(empty($boardsInfo)) {
     die("Error requesting your boards - maybe check your tokens are correct.\n");
 }
+
+// 2) Fetch all Trello Organizations
 $url_organizations = "https://api.trello.com/1/members/$username/organizations?&key=$key&token=$application_token";
 $response = file_get_contents($url_organizations);
 $organizationsInfo = json_decode($response);
 if(empty($organizationsInfo)) {
     die("Error requesting your organizations - maybe check your tokens are correct.\n");
 }
+$organizations = array();
+foreach($organizationsInfo as $org){
+    $organizations[$org->id] = $org->displayName;
+}
 
-// 2) Only backup the "open" boards
+// 3) Only backup the "open" boards
 $boards = array();
 foreach($boardsInfo as $board) {
     if(!$backup_closed_boards && $board->closed) {
         continue;
     }
 
-    $orgName = '';
-    foreach($organizationsInfo as $org){
-        if($org->id == $board->idOrganization) {
-            $orgName = $org->displayName;
-            break;
-        }
-    }
-    if(empty($orgName)) $orgName = 'myboards';
-
     $boards[$board->id] = (object) array(
         "name" => $board->name,
-        "orgName" => $orgName,
+        "orgName" => (isset($organizations[$board->idOrganization])? $organizations[$board->idOrganization] : 'My Boards'),
         "closed" => (($board->closed) ? true : false)
     );
 }
 
 echo count($boards) . " boards to backup... \n";
 
-// 3) Backup now!
+// 4) Backup now!
 foreach($boards as $id => $board) {
     $url_individual_board_json = "https://api.trello.com/1/boards/$id?actions=all&actions_limit=1000&cards=all&lists=all&members=all&member_fields=all&checklists=all&fields=all&key=$key&token=$application_token";
     $filename = './trello-'.(($board->closed)?'CLOSED-':'').'org-'.sanitize_file_name($board->orgName).'-board-'.sanitize_file_name($board->name).'.json';
