@@ -19,7 +19,7 @@ Usage
 - Edit `config.php` and paste this token in `$application_token`.
 - You are ready! Run this script will download your Trello boards:
 	`php5 trello-backup/trello-backup.php`
-	It will create a file named `trello-board-[NameHere].json` for each of your board.
+	It will create a file named `trello-org-[OrganizationNameHere]-board-[NameHere].json` for each of your board.
 Also recommended: setup a crontab to automatically backup every day or every week.
 
 Enjoy!
