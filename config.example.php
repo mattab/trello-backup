@@ -13,3 +13,5 @@ $application_token = 'Here_your_app_token';
 // By default we don't backup closed boards (less clutter)
 $backup_closed_boards = false;
 
+// Backup all Trello Boards from the organizations that the user has read access to
+$backup_organizaiton_boards = false;
