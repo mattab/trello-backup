@@ -14,4 +14,4 @@ $application_token = 'Here_your_app_token';
 $backup_closed_boards = false;
 
 // Backup all Trello Boards from the organizations that the user has read access to
-$backup_organizaiton_boards = false;
+$backup_all_organization_boards = false;

@@ -40,8 +40,7 @@ foreach($organizationsInfo as $org){
 }
 
 // 3) Fetch all Trello Boards from the organizations that the user has read access to
-if($backup_organizaiton_boards) {
-    $application_token = trim($application_token);
+if($backup_all_organization_boards) {
     foreach($organizations as $organization_id => $organization_name) {
         $url_boards = "https://api.trello.com/1/organizations/$organization_id/boards?&key=$key&token=$application_token";
         $response = file_get_contents($url_boards);
