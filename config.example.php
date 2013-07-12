@@ -15,3 +15,7 @@ $backup_closed_boards = false;
 
 // Backup all Trello Boards from the organizations that the user has read access to
 $backup_all_organization_boards = false;
+
+// HTTP proxy, if one is required, in the format 'host:port', e.g. 'proxy.example.com:80' or '192.168.1.254:8080'
+$proxy= '';
+
