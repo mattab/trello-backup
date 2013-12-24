@@ -5,7 +5,7 @@
 $key = 'here_put_your_Key';
 
 // Your Trello username
-$username = 'here_your_username_witout_@_symbol';
+$username = 'here_your_username_WITHOUT_the_@_symbol';
 
 // Your Application Token (set $key and $username only, then run the trello-backup.php to obtain your application_token to set below
 $application_token = 'Here_your_app_token';
