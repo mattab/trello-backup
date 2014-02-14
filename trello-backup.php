@@ -31,9 +31,6 @@ if(empty($boardsInfo)) {
 $url_organizations = "https://api.trello.com/1/members/$username/organizations?&key=$key&token=$application_token";
 $response = file_get_contents($url_organizations);
 $organizationsInfo = json_decode($response);
-if(empty($organizationsInfo)) {
-    die("Error requesting your organizations - maybe check your tokens are correct.\n");
-}
 $organizations = array();
 foreach($organizationsInfo as $org){
     $organizations[$org->id] = $org->displayName;
