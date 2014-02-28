@@ -64,3 +64,7 @@ This script officially started from [this Gist](https://gist.github.com/4498847)
 The README Is longer than the script - I'm also practising Markdown.
 
 
+<!-- Piwik Image Tracker -->
+<img src="http://demo.piwik.org/piwik.php?idsite=41&amp;rec=1&amp;action_name=Readme" style="border:0" alt="" />
+<!-- End Piwik -->
+
