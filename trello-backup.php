@@ -7,7 +7,14 @@
  * License: GPL v3 or later (I'm using that Wordpress function below and WP is released under GPL)
  */
 
-require_once 'config.php';
+if ($argc == 2) {
+    $config_file = $argv[1];
+}
+else {
+    $config_file = 'config.php';
+}
+
+require_once $config_file;
 
 // If the application_token looks incorrect we display help
 if(strlen($application_token) < 30) {
