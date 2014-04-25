@@ -1,6 +1,9 @@
 <?php
 // See also README.md
 
+// Where to store backups
+$path = '.';
+
 // Key from https://trello.com/1/appKey/generate
 $key = 'here_put_your_Key';
 

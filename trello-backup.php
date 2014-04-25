@@ -88,7 +88,7 @@ echo count($boards) . " boards to backup... \n";
 // 5) Backup now!
 foreach($boards as $id => $board) {
     $url_individual_board_json = "https://api.trello.com/1/boards/$id?actions=all&actions_limit=1000&cards=all&lists=all&members=all&member_fields=all&checklists=all&fields=all&key=$key&token=$application_token";
-    $filename = './trello'
+    $filename = "$path/trello"
 		. (($board->closed) ? '-CLOSED' : '')
 		. (!empty($board->orgName) ? '-org-' . sanitize_file_name($board->orgName) : '' )
 		. '-board-' . sanitize_file_name($board->name)
