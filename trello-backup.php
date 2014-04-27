@@ -9,8 +9,7 @@
 
 if ($argc == 2) {
     $config_file = $argv[1];
-}
-else {
+} else {
     $config_file = 'config.php';
 }
 
