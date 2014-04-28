@@ -25,6 +25,10 @@ Also recommended: setup a crontab to automatically backup every day or every wee
 
 Enjoy!
 
+How to backup several accounts
+---
+If you want to backup multiple Trello accounts, you can make multiple copies of `example-config.php` with different file names. Run `trello-backup.php` once for each account, specifying the path to the config file as an argument. For example, `php5 trello-backup.php account1.php`.
+
 Why Trello-Backup?
 ---
 Trello.com is a really wonderful free tool, but it has one technical issue 'by design': it is not [Free Software](http://www.fsf.org/) that we can self host ourselves.

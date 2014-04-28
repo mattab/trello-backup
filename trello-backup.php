@@ -7,7 +7,13 @@
  * License: GPL v3 or later (I'm using that Wordpress function below and WP is released under GPL)
  */
 
-require_once 'config.php';
+if ($argc == 2) {
+    $config_file = $argv[1];
+} else {
+    $config_file = 'config.php';
+}
+
+require_once $config_file;
 
 // If the application_token looks incorrect we display help
 if(strlen($application_token) < 30) {
@@ -81,7 +87,7 @@ echo count($boards) . " boards to backup... \n";
 // 5) Backup now!
 foreach($boards as $id => $board) {
     $url_individual_board_json = "https://api.trello.com/1/boards/$id?actions=all&actions_limit=1000&cards=all&lists=all&members=all&member_fields=all&checklists=all&fields=all&key=$key&token=$application_token";
-    $filename = './trello'
+    $filename = "$path/trello"
 		. (($board->closed) ? '-CLOSED' : '')
 		. (!empty($board->orgName) ? '-org-' . sanitize_file_name($board->orgName) : '' )
 		. '-board-' . sanitize_file_name($board->name)
