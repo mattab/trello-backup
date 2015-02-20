@@ -13,7 +13,7 @@ Usage
 	`git clone https://github.com/mattab/trello-backup.git trello-backup`
 - Duplicate the `config.example.php` file to `config.php` and fill in your details (as follows)
 - With your browser go to: [https://trello.com/1/appKey/generate](https://trello.com/1/appKey/generate) - It will give you your public 'Key' for Trello API.
-- Edit the file trello-backup/config.php and set `$key` to your 'Key', and set `$username` to your Trello.com username (without the at sign `@`)
+- Edit the file trello-backup/config.php and set `$key` to your 'Key'.
 - Then Run the script:
 	`php5 trello-backup/trello-backup.php`
 	It will output a URL that you can visit with your browser to get the Application Token. Visit this URL. Then click 'Allow' and copy the token string.
