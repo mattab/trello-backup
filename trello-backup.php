@@ -38,7 +38,7 @@ if (!empty($proxy)) {
 
 // 1) Fetch all Trello Boards
 $application_token = trim($application_token);
-$url_boards = "https://api.trello.com/1/members/$username/boards?&key=$key&token=$application_token";
+$url_boards = "https://api.trello.com/1/members/me/boards?&key=$key&token=$application_token";
 $response = file_get_contents($url_boards, false, $ctx);
 $boardsInfo = json_decode($response);
 if(empty($boardsInfo)) {
@@ -46,7 +46,7 @@ if(empty($boardsInfo)) {
 }
 
 // 2) Fetch all Trello Organizations
-$url_organizations = "https://api.trello.com/1/members/$username/organizations?&key=$key&token=$application_token";
+$url_organizations = "https://api.trello.com/1/members/me/organizations?&key=$key&token=$application_token";
 $response = file_get_contents($url_organizations, false, $ctx);
 $organizationsInfo = json_decode($response);
 $organizations = array();
