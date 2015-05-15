@@ -75,6 +75,10 @@ foreach($boardsInfo as $board) {
         continue;
     }
 
+    if(isset($ignore_boards) && in_array($board->name, $ignore_boards)) {
+        continue;
+    }
+
     $boards[$board->id] = (object) array(
         "name" => $board->name,
         "orgName" => (isset($organizations[$board->idOrganization])? $organizations[$board->idOrganization] : ''),
