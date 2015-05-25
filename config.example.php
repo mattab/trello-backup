@@ -21,3 +21,6 @@ $proxy= '';
 
 // Array of boards to not backup regardless of other settings
 $ignore_boards = array('Welcome Board');
+
+// Timestamp format, e.g. 'Y-m-d_H-i-s'
+$filename_append_datetime = false;
