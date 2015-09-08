@@ -56,6 +56,10 @@ Trello uses a paradigm for managing projects known as kanban, a method that had 
 
 Source: Trello on [Wikipedia](http://en.wikipedia.org/wiki/Trello)
 
+Common Issues
+---
+Fatal error: Maximum execution time of x seconds exceed in (Directory here). The simple fix here is to edit your php.ini file and set the max_execution_time attribute to 0 to allow your script to run as long as you need it to. 
+
 Credits
 ---
 This is my first Github project!
