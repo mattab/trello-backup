@@ -40,6 +40,9 @@ if (!empty($proxy)) {
 $application_token = trim($application_token);
 $url_boards = "https://api.trello.com/1/members/me/boards?&key=$key&token=$application_token";
 $response = file_get_contents($url_boards, false, $ctx);
+if ($response === FALSE) {
+    die("Error requesting boards.\n");
+}
 $boardsInfo = json_decode($response);
 if(empty($boardsInfo)) {
     die("Error requesting your boards - maybe check your tokens are correct.\n");
