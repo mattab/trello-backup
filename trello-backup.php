@@ -41,7 +41,7 @@ $application_token = trim($application_token);
 $url_boards = "https://api.trello.com/1/members/me/boards?&key=$key&token=$application_token";
 $response = file_get_contents($url_boards, false, $ctx);
 if ($response === FALSE) {
-    die("Error requesting boards.\n");
+    die("Error requesting boards - maybe try again later and/or check your internet connection\n");
 }
 $boardsInfo = json_decode($response);
 if(empty($boardsInfo)) {
