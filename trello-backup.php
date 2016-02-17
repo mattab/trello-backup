@@ -7,11 +7,8 @@
  * License: GPL v3 or later (I'm using that Wordpress function below and WP is released under GPL)
  */
 
-if ($argc == 2) {
-    $config_file = $argv[1];
-} else {
-    $config_file = 'config.php';
-}
+
+$config_file = 'config.php';
 
 require_once $config_file;
 
@@ -93,20 +90,34 @@ echo count($boards) . " boards to backup... \n";
 
 // 5) Backup now!
 foreach($boards as $id => $board) {
-    $url_individual_board_json = "https://api.trello.com/1/boards/$id?actions=all&actions_limit=1000&cards=all&lists=all&members=all&member_fields=all&checklists=all&fields=all&key=$key&token=$application_token";
-    $filename = "$path/trello"
+    $url_individual_board_json = "https://api.trello.com/1/boards/$id?actions=all&actions_limit=1000&card_attachment_fields=all&cards=all&lists=all&members=all&member_fields=all&card_attachment_fields=all&checklists=all&fields=all&key=$key&token=$application_token";
+    $dirname = "$path/trello"
         . (($board->closed) ? '-CLOSED' : '')
         . (!empty($board->orgName) ? '-org-' . sanitize_file_name($board->orgName) : '' )
         . '-board-' . sanitize_file_name($board->name)
-        . (($filename_append_datetime) ? '-' . date($filename_append_datetime, time()) : '')
-        . '.json';
-    echo "recording ".(($board->closed)?'the closed ':'')."board '".$board->name."' with organization '".$board->orgName."' in filename $filename...\n";
+        . (($filename_append_datetime) ? '-' . date($filename_append_datetime, time()) : '');
+    $filename = $dirname . '.json';
+    echo "recording $id ".(($board->closed)?'the closed ':'')."board '".$board->name."' with organization '".$board->orgName."' in filename $filename...\n";
     $response = file_get_contents($url_individual_board_json, false, $ctx);
     $decoded = json_decode($response);
     if(empty($decoded)) {
         die("The board '$board->name' or organization '$board->orgName' could not be downloaded, response was : $response ");
     }
     file_put_contents( $filename, $response );
+
+    // 5a) Backup the files
+    $trelloObject = json_decode($response);
+    foreach ($trelloObject->actions as $member) {
+        if(!isset($member->data->attachment->url))
+            continue;
+
+        if (!file_exists($dirname)) {
+            mkdir($dirname, 0777, true);
+        }
+
+        file_put_contents($dirname . '/' . $member->data->attachment->name, file_get_contents($member->data->attachment->url));
+        echo "\tAttachment downloaded: '" . $member->data->attachment->name . "'\n";
+    }
 }
 echo "your Trello boards are now safely downloaded!\n";
 
