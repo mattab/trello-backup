@@ -118,7 +118,7 @@ foreach ($boards as $id => $board) {
             mkdir($dirname, 0777, true);
         }
 
-        file_put_contents($dirname . '/' . $member->data->attachment->name, file_get_contents($member->data->attachment->url));
+        file_put_contents($dirname . '/' . sanitize_file_name($member->data->attachment->name), file_get_contents($member->data->attachment->url));
         echo "\t'" . $member->data->attachment->name . "'\n";
     }
 }
