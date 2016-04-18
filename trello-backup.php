@@ -81,6 +81,9 @@ foreach($boardsInfo as $board) {
     if(isset($ignore_boards) && in_array($board->name, $ignore_boards)) {
         continue;
     }
+	if (isset($boards_to_download) && !empty($boards_to_download) && !in_array($board->name, $boards_to_download)) {
+		continue;
+	}
 
     $boards[$board->id] = (object) array(
         "name" => $board->name,
