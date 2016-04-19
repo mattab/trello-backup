@@ -94,13 +94,9 @@ echo count($boards) . " boards to backup... \n";
 // 5) Backup now!
 foreach ($boards as $id => $board) {
     $url_individual_board_json = "https://api.trello.com/1/boards/$id?actions=all&actions_limit=1000&card_attachment_fields=all&cards=all&lists=all&members=all&member_fields=all&card_attachment_fields=all&checklists=all&fields=all&key=$key&token=$application_token";
-    $dirname = "$path/trello"
-        . (($board->closed) ? '-CLOSED' : '')
-        . (!empty($board->orgName) ? '-org-' . sanitize_file_name($board->orgName) : '')
-        . '-board-' . sanitize_file_name($board->name)
-        . (($filename_append_datetime) ? '-' . date($filename_append_datetime, time()) : '');
+    $dirname = getPathToStoreBackups($path, $board, $filename_append_datetime);
     $filename = $dirname . '.json';
-    echo "recording $id " . (($board->closed) ? 'the closed ' : '') . "board '" . $board->name . "' with organization '" . $board->orgName . "' in filename $filename...\n";
+    echo "recording " . (($board->closed) ? 'the closed ' : '') . "board '" . $board->name . "' " . (empty($board->orgName) ? "" : "(within organization '" . $board->orgName . "')") . " in filename $filename ...\n";
     $response = file_get_contents($url_individual_board_json, false, $ctx);
     $decoded = json_decode($response);
     if (empty($decoded)) {
@@ -108,21 +104,48 @@ foreach ($boards as $id => $board) {
     }
     file_put_contents($filename, $response);
 
-    // 5a) Backup the files
-    $trelloObject = json_decode($response);
-    foreach ($trelloObject->actions as $member) {
-        if (!isset($member->data->attachment->url))
-            continue;
-
-        if (!file_exists($dirname)) {
-            mkdir($dirname, 0777, true);
+    // 5a) Backup the attachments
+    if($backup_attachments) {
+        $trelloObject = json_decode($response);
+        $attachments = array();
+        foreach ($trelloObject->actions as $member) {
+            if (isset($member->data->attachment->url)) {
+                $attachments[$member->data->attachment->url] = $member->data->attachment->name;
+            }
         }
 
-        file_put_contents($dirname . '/' . sanitize_file_name($member->data->attachment->name), file_get_contents($member->data->attachment->url));
-        echo "\t'" . $member->data->attachment->name . "'\n";
+        if(!empty($attachments)) {
+            echo "\t" . count($attachments) . " attachments will now be downloaded and backed up...\n";
+
+            if (!file_exists($dirname)) {
+                mkdir($dirname, 0777, true);
+            }
+            $i = 1;
+            foreach ($attachments as $url => $name) {
+                $path = $dirname . '/' . sanitize_file_name($name);
+                file_put_contents($path, file_get_contents($url));
+                echo "\t" . $i++ . ") " . $name . " in " . $path . "\n";
+            }
+        }
     }
+
 }
 echo "your Trello boards are now safely downloaded!\n";
+
+/**
+ * @param $path
+ * @param $board
+ * @param $filename_append_datetime
+ * @return string
+ */
+function getPathToStoreBackups($path, $board, $filename_append_datetime)
+{
+    return "$path/trello"
+    . (($board->closed) ? '-CLOSED' : '')
+    . (!empty($board->orgName) ? '-org-' . sanitize_file_name($board->orgName) : '')
+    . '-board-' . sanitize_file_name($board->name)
+    . (($filename_append_datetime) ? '-' . date($filename_append_datetime, time()) : '');
+}
 
 /**
  * Found in Wordpress:
