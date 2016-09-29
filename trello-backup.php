@@ -122,9 +122,9 @@ foreach ($boards as $id => $board) {
             }
             $i = 1;
             foreach ($attachments as $url => $name) {
-                $path = $dirname . '/' . sanitize_file_name($name);
-                file_put_contents($path, file_get_contents($url));
-                echo "\t" . $i++ . ") " . $name . " in " . $path . "\n";
+                $pathForAttachment = $dirname . '/' . sanitize_file_name($name);
+                file_put_contents($pathForAttachment, file_get_contents($url));
+                echo "\t" . $i++ . ") " . $name . " in " . $pathForAttachment . "\n";
             }
         }
     }
