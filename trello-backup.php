@@ -110,7 +110,7 @@ foreach ($boards as $id => $board) {
         $attachments = array();
         foreach ($trelloObject->actions as $member) {
             if (isset($member->data->attachment->url)) {
-                $attachments[$member->data->attachment->url] = $member->data->attachment->name;
+                $attachments[$member->data->attachment->url] = $member->data->attachment->id . '-' . $member->data->attachment->name;
             }
         }
 
