@@ -15,11 +15,11 @@ Usage
 - With your browser go to: [https://trello.com/1/appKey/generate](https://trello.com/1/appKey/generate) - It will give you your public 'Key' for Trello API.
 - Edit the file trello-backup/config.php and set `$key` to your 'Key'.
 - Then Run the script:
-	`php7 trello-backup/trello-backup.php`
+	`php trello-backup/trello-backup.php`
 	It will output a URL that you can visit with your browser to get the Application Token. Visit this URL. Then click 'Allow' and copy the token string.
 - Edit `config.php` and paste this token in `$application_token`.
 - You are ready! Run this script will download your Trello boards:
-	`php7 trello-backup/trello-backup.php`
+	`php trello-backup/trello-backup.php`
 	It will create a file named `trello-org-[OrganizationNameHere]-board-[NameHere].json` for each of your board.
 Also recommended: setup a crontab to automatically backup every day or every week.
 
@@ -27,7 +27,7 @@ Enjoy!
 
 How to backup several accounts
 ---
-If you want to backup multiple Trello accounts, you can make multiple copies of `example-config.php` with different file names. Run `trello-backup.php` once for each account, specifying the path to the config file as an argument. For example, `php7 trello-backup.php account1.php`.
+If you want to backup multiple Trello accounts, you can make multiple copies of `example-config.php` with different file names. Run `trello-backup.php` once for each account, specifying the path to the config file as an argument. For example, `php trello-backup.php account1.php`.
 
 Why Trello-Backup?
 ---
