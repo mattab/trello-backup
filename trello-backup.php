@@ -102,14 +102,24 @@ foreach ($boards as $id => $board) {
 		{
 			create_backup_dir($path);
 		}
+
+		if(!is_writable($path))
+		{
+			die("You don't have permission to write to backup dir $path");
+		}
+
     $filename = $dirname . '.json';
+
     echo "recording " . (($board->closed) ? 'the closed ' : '') . "board '" . $board->name . "' " . (empty($board->orgName) ? "" : "(within organization '" . $board->orgName . "')") . " in filename $filename ...\n";
     $response = file_get_contents($url_individual_board_json, false, $ctx);
     $decoded = json_decode($response);
     if (empty($decoded)) {
         die("The board '$board->name' or organization '$board->orgName' could not be downloaded, response was : $response ");
     }
-    file_put_contents($filename, $response);
+		if(file_put_contents($filename, $response) === false)
+		{
+			die("An error occured while writing to $filename");
+		}
 
     // 5a) Backup the attachments
     if($backup_attachments) {
@@ -179,7 +189,7 @@ function sanitize_file_name($filename)
 
 function create_backup_dir($dirname)
 {
-	if(!is_writeable($dirname))
+	if(!is_writeable(dirname($dirname)))
 	{
 		die("Error creating backup dir - directory $dirname is not writeable\n");
 	}
