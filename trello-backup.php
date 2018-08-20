@@ -95,6 +95,9 @@ foreach ($boardsInfo as $board) {
 echo count($boards) . " boards to backup... \n";
 
 // 5) Backup now!
+if ($create_path && !file_exists($path)) {
+    mkdir($path, 0777, true);
+}
 foreach ($boards as $id => $board) {
     $url_individual_board_json = "https://api.trello.com/1/boards/$id?actions=all&actions_limit=1000&card_attachment_fields=all&cards=all&lists=all&members=all&member_fields=all&card_attachment_fields=all&checklists=all&fields=all&key=$key&token=$application_token";
     $dirname = getPathToStoreBackups($path, $board, $filename_append_datetime);
