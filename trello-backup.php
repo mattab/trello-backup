@@ -95,6 +95,9 @@ foreach ($boardsInfo as $board) {
         "closed" => (($board->closed) ? true : false)
     );
 }
+if (empty($boards)) {
+    die("Error: No boards found in your account. Please review your configuration or start by adding a board to your account.");
+}
 
 echo count($boards) . " boards to backup... \n";
 
