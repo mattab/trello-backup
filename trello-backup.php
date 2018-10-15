@@ -105,6 +105,10 @@ echo count($boards) . " boards to backup... \n";
 foreach ($boards as $id => $board) {
     $url_individual_board_json = "https://api.trello.com/1/boards/$id?actions=all&actions_limit=1000&card_attachment_fields=all&cards=all&lists=all&members=all&member_fields=all&card_attachment_fields=all&checklists=all&fields=all&key=$key&token=$application_token";
     $dirname = getPathToStoreBackups($path, $board, $filename_append_datetime);
+		if(!file_exists($path))
+		{
+			create_backup_dir($path);
+		}
     $filename = $dirname . '.json';
     echo "recording " . (($board->closed) ? 'the closed ' : '') . "board '" . $board->name . "' " . (empty($board->orgName) ? "" : "(within organization '" . $board->orgName . "')") . " in filename $filename ...\n";
     $response = file_get_contents($url_individual_board_json, false, $ctx);
@@ -178,4 +182,13 @@ function sanitize_file_name($filename)
     $filename = preg_replace('/[\s-]+/', '-', $filename);
     $filename = trim($filename, '.-_');
     return $filename;
+}
+
+function create_backup_dir($dirname)
+{
+	if(!is_writeable($dirname))
+	{
+		die("Error creating backup dir - directory $dirname is not writeable\n");
+	}
+	return mkdir($dirname, 0777, $recursive = true);
 }
