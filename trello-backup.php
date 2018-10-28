@@ -124,6 +124,9 @@ foreach ($boards as $id => $board) {
         $attachments = array();
         foreach ($trelloObject->actions as $member) {
             if (isset($member->data->attachment->url)) {
+                if (strpos($member->data->attachment->url, 'drive.google.com/file') !== false && !$backup_gdrive_attachments) {
+                    continue;
+                }
                 $attachments[$member->data->attachment->url] = $member->data->attachment->id . '-' . $member->data->attachment->name;
             }
         }
@@ -137,7 +140,12 @@ foreach ($boards as $id => $board) {
             $i = 1;
             foreach ($attachments as $url => $name) {
                 $pathForAttachment = $dirname . '/' . sanitize_file_name($name);
-                file_put_contents($pathForAttachment, file_get_contents($url));
+                if (strpos($url, 'drive.google.com/file') !== false) {
+                    $url_file_content = "[InternetShortcut]\nURL=" . $url . "\n";
+                    file_put_contents($pathForAttachment . '.url', $url_file_content);
+                } else {
+                    file_put_contents($pathForAttachment, file_get_contents($url));
+                }
                 echo "\t" . $i++ . ") " . $name . " in " . $pathForAttachment . "\n";
             }
         }
