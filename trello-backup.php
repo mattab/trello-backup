@@ -15,6 +15,13 @@ if ($argc == 2) {
 
 require_once $config_file;
 
+if(!isset($timezone))
+{
+	$timezone = "UTC";
+	print "No timezone set in config ($config_file), using $timezone\n";
+}
+date_default_timezone_set($timezone);
+
 // If the application_token looks incorrect we display help
 if (strlen($application_token) < 30) {
     // 0) Fetch the Application tokenn
