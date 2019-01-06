@@ -19,7 +19,7 @@ if (!file_exists($config_file)) {
 }
 require_once $config_file;
 
-if(!isset($timezone))
+if(empty($timezone))
 {
 	$timezone = "UTC";
 	print "No timezone set in config ($config_file), using $timezone\n";
