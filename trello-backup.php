@@ -203,9 +203,8 @@ function sanitize_file_name($filename)
 
 function create_backup_dir($dirname)
 {
-	if(!is_writeable(dirname($dirname)))
+	if(!mkdir($dirname, 0777, $recursive = true))
 	{
 		die("Error creating backup dir - directory $dirname is not writeable\n");
 	}
-	return mkdir($dirname, 0777, $recursive = true);
 }
