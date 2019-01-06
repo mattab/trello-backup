@@ -31,3 +31,6 @@ $boards_to_download = array();
 
 // Timestamp format, e.g. 'Y-m-d_H-i-s'
 $filename_append_datetime = false;
+
+//Timezone, e.g. UTC
+$timezone = 'UTC';
