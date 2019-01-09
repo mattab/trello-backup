@@ -10,10 +10,21 @@
 if ($argc == 2) {
     $config_file = $argv[1];
 } else {
-    $config_file = 'config.php';
+    $config_file = __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
 }
 
+// check config file exits
+if (!file_exists($config_file)) {
+    die("Please duplicate the config.example.php file to config.php and fill in your details (as follows).");
+}
 require_once $config_file;
+
+if(empty($timezone))
+{
+	$timezone = "UTC";
+	print "No timezone set in config ($config_file), using $timezone\n";
+}
+date_default_timezone_set($timezone);
 
 // If the application_token looks incorrect we display help
 if (strlen($application_token) < 30) {
@@ -91,6 +102,9 @@ foreach ($boardsInfo as $board) {
         "closed" => (($board->closed) ? true : false)
     );
 }
+if (empty($boards)) {
+    die("Error: No boards found in your account. Please review your configuration or start by adding a board to your account.");
+}
 
 echo count($boards) . " boards to backup... \n";
 
@@ -103,11 +117,10 @@ foreach ($boards as $id => $board) {
 			create_backup_dir($path);
 		}
 
-		if(!is_writable($path))
+    if(!is_writable($path))
 		{
 			die("You don't have permission to write to backup dir $path");
 		}
-
     $filename = $dirname . '.json';
 
     echo "recording " . (($board->closed) ? 'the closed ' : '') . "board '" . $board->name . "' " . (empty($board->orgName) ? "" : "(within organization '" . $board->orgName . "')") . " in filename $filename ...\n";
@@ -189,9 +202,8 @@ function sanitize_file_name($filename)
 
 function create_backup_dir($dirname)
 {
-	if(!is_writeable(dirname($dirname)))
+	if(!mkdir($dirname, 0777, $recursive = true))
 	{
 		die("Error creating backup dir - directory $dirname is not writeable\n");
 	}
-	return mkdir($dirname, 0777, $recursive = true);
 }
