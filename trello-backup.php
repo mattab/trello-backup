@@ -36,7 +36,7 @@ if (strlen($application_token) < 30) {
 }
 
 // Prepare proxy configuration if necessary
-$ctx = NULL;
+$ctx = null;
 if (!empty($proxy)) {
     $aContext = array(
         'http' => array(
@@ -51,7 +51,7 @@ if (!empty($proxy)) {
 $application_token = trim($application_token);
 $url_boards = "https://api.trello.com/1/members/me/boards?&key=$key&token=$application_token";
 $response = file_get_contents($url_boards, false, $ctx);
-if ($response === FALSE) {
+if ($response === false) {
     die("Error requesting boards - maybe try again later and/or check your internet connection\n");
 }
 $boardsInfo = json_decode($response);
