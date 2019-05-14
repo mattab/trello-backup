@@ -92,9 +92,9 @@ foreach ($boardsInfo as $board) {
     if (isset($ignore_boards) && in_array($board->name, $ignore_boards)) {
         continue;
     }
-	if (isset($boards_to_download) && !empty($boards_to_download) && !in_array($board->name, $boards_to_download)) {
-		continue;
-	}
+    if (isset($boards_to_download) && !empty($boards_to_download) && !in_array($board->name, $boards_to_download)) {
+        continue;
+    }
 
     $boards[$board->id] = (object)array(
         "name" => $board->name,
@@ -112,18 +112,26 @@ echo count($boards) . " boards to backup... \n";
 foreach ($boards as $id => $board) {
     $url_individual_board_json = "https://api.trello.com/1/boards/$id?actions=all&actions_limit=1000&card_attachment_fields=all&cards=all&lists=all&members=all&member_fields=all&card_attachment_fields=all&checklists=all&fields=all&key=$key&token=$application_token";
     $dirname = getPathToStoreBackups($path, $board, $filename_append_datetime);
-		if(!file_exists($path))
-		{
-			create_backup_dir($path);
-		}
+    
+    if(!file_exists($path)) {
+        create_backup_dir($path);
+    }
+
+    if(!is_writable($path)) {
+        die("You don't have permission to write to backup dir $path");
+    }
+    
     $filename = $dirname . '.json';
+
     echo "recording " . (($board->closed) ? 'the closed ' : '') . "board '" . $board->name . "' " . (empty($board->orgName) ? "" : "(within organization '" . $board->orgName . "')") . " in filename $filename ...\n";
     $response = file_get_contents($url_individual_board_json, false, $ctx);
     $decoded = json_decode($response);
     if (empty($decoded)) {
         die("The board '$board->name' or organization '$board->orgName' could not be downloaded, response was : $response ");
     }
-    file_put_contents($filename, $response);
+    if(file_put_contents($filename, $response) === false) {
+        die("An error occured while writing to $filename");
+    }
 
     // 5a) Backup the attachments
     if($backup_attachments) {
