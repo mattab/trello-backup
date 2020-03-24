@@ -210,18 +210,15 @@ function create_backup_dir($dirname)
 
 function output_or_log($string, $newline = "\n")
 {
-	if($newline)
-	{
+	if ($newline) {
 		$string .= "\n";
 	}
 
-	if(!defined("SILENT_MODE") or !SILENT_MODE)
-	{
+	if (!defined("SILENT_MODE") || !SILENT_MODE) {
 		echo $string;
 	}
 
-	if(defined("LOG_FILE") and !empty(LOG_FILE))
-	{
+	if (defined("LOG_FILE") && !empty(LOG_FILE)) {
 		$log_string = sprintf("[%s] %s", date("Y-m-d H:i:s"), $string);
     if(file_put_contents(LOG_FILE, $log_string, FILE_APPEND) === false) {
 			die("Can't write log to " . LOG_FILE);
