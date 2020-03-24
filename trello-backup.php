@@ -7,7 +7,6 @@
  * License: GPL v3 or later (I'm using that Wordpress function below and WP is released under GPL)
  */
 
-define("SILENT_MODE", true);
 if ($argc == 2) {
     $config_file = $argv[1];
 } else {

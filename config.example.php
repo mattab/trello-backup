@@ -34,3 +34,6 @@ $filename_append_datetime = false;
 
 //Timezone, e.g. UTC
 $timezone = 'UTC';
+
+// Echo output or not
+define("SILENT_MODE", false);
