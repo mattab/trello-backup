@@ -7,6 +7,7 @@
  * License: GPL v3 or later (I'm using that Wordpress function below and WP is released under GPL)
  */
 
+define("SILENT_MODE", true);
 if ($argc == 2) {
     $config_file = $argv[1];
 } else {
@@ -106,7 +107,10 @@ if (empty($boards)) {
     die("Error: No boards found in your account. Please review your configuration or start by adding a board to your account.");
 }
 
-echo count($boards) . " boards to backup... \n";
+if(!SILENT_MODE)
+{
+	echo count($boards) . " boards to backup... \n";
+}
 
 // 5) Backup now!
 foreach ($boards as $id => $board) {
@@ -123,7 +127,10 @@ foreach ($boards as $id => $board) {
     
     $filename = $dirname . '.json';
 
-    echo "recording " . (($board->closed) ? 'the closed ' : '') . "board '" . $board->name . "' " . (empty($board->orgName) ? "" : "(within organization '" . $board->orgName . "')") . " in filename $filename ...\n";
+		if(!SILENT_MODE)
+		{
+			echo "recording " . (($board->closed) ? 'the closed ' : '') . "board '" . $board->name . "' " . (empty($board->orgName) ? "" : "(within organization '" . $board->orgName . "')") . " in filename $filename ...\n";
+		}
     $response = file_get_contents($url_individual_board_json, false, $ctx);
     $decoded = json_decode($response);
     if (empty($decoded)) {
@@ -144,7 +151,10 @@ foreach ($boards as $id => $board) {
         }
 
         if(!empty($attachments)) {
-            echo "\t" . count($attachments) . " attachments will now be downloaded and backed up...\n";
+						if(!SILENT_MODE)
+						{
+							echo "\t" . count($attachments) . " attachments will now be downloaded and backed up...\n";
+						}
 
             if (!file_exists($dirname)) {
                 mkdir($dirname, 0777, true);
@@ -153,13 +163,20 @@ foreach ($boards as $id => $board) {
             foreach ($attachments as $url => $name) {
                 $pathForAttachment = $dirname . '/' . sanitize_file_name($name);
                 file_put_contents($pathForAttachment, file_get_contents($url));
-                echo "\t" . $i++ . ") " . $name . " in " . $pathForAttachment . "\n";
+								if(!SILENT_MODE)
+								{
+									echo "\t" . $i++ . ") " . $name . " in " . $pathForAttachment . "\n";
+								}
             }
         }
     }
 
 }
-echo "your Trello boards are now safely downloaded!\n";
+
+if(!SILENT_MODE)
+{
+	echo "your Trello boards are now safely downloaded!\n";
+}
 
 /**
  * @param $path
