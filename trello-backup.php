@@ -50,7 +50,7 @@ if (empty($boardsInfo)) {
 
 // 2) Fetch all Trello Organizations
 $url_organizations = "https://api.trello.com/1/members/me/organizations?&key=$key&token=$application_token";
-$response = file_get_contents($url_organizations, false, $ctx);
+$response = do_request($url_organizations);
 $organizationsInfo = json_decode($response);
 $organizations = array();
 foreach ($organizationsInfo as $org) {
@@ -61,7 +61,7 @@ foreach ($organizationsInfo as $org) {
 if ($backup_all_organization_boards) {
     foreach ($organizations as $organization_id => $organization_name) {
         $url_boards = "https://api.trello.com/1/organizations/$organization_id/boards?&key=$key&token=$application_token";
-        $response = file_get_contents($url_boards, false, $ctx);
+        $response = do_request($url_boards);
         $organizationBoardsInfo = json_decode($response);
         if (empty($organizationBoardsInfo)) {
             die("Error requesting the organization $organization_name boards - maybe check your tokens are correct.\n");
@@ -113,7 +113,7 @@ foreach ($boards as $id => $board) {
     $filename = $dirname . '.json';
 
     echo "recording " . (($board->closed) ? 'the closed ' : '') . "board '" . $board->name . "' " . (empty($board->orgName) ? "" : "(within organization '" . $board->orgName . "')") . " in filename $filename ...\n";
-    $response = file_get_contents($url_individual_board_json, false, $ctx);
+    $response = do_request($url_individual_board_json);
     $decoded = json_decode($response);
     if (empty($decoded)) {
         die("The board '$board->name' or organization '$board->orgName' could not be downloaded, response was : $response ");
