@@ -35,18 +35,6 @@ if (strlen($application_token) < 30) {
     die("Go to this URL with your web browser (eg. Firefox) to authorize your Trello Backups to run:\n$url_token\n");
 }
 
-// Prepare proxy configuration if necessary
-$ctx = null;
-if (!empty($proxy)) {
-    $aContext = array(
-        'http' => array(
-            'proxy' => 'tcp://' . $proxy,
-            'request_fullurl' => true
-        )
-    );
-    $ctx = stream_context_create($aContext);
-}
-
 // 1) Fetch all Trello Boards
 $application_token = trim($application_token);
 $url_boards = "https://api.trello.com/1/members/me/boards?&key=$key&token=$application_token";
