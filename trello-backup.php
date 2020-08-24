@@ -50,7 +50,8 @@ if (!empty($proxy)) {
 // 1) Fetch all Trello Boards
 $application_token = trim($application_token);
 $url_boards = "https://api.trello.com/1/members/me/boards?&key=$key&token=$application_token";
-$response = file_get_contents($url_boards, false, $ctx);
+$response 	= do_request($url_boards);
+
 if ($response === false) {
     die("Error requesting boards - maybe try again later and/or check your internet connection\n");
 }
@@ -205,4 +206,22 @@ function create_backup_dir($dirname)
 	{
 		die("Error creating backup dir - directory $dirname is not writeable\n");
 	}
+}
+
+/**
+ * @param $url The url to fetch
+ * @return string Output from the server, or false on error
+ */
+function do_request($url)
+{
+	global $proxy;
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	// disclaimer: I don't have a proxy to test this with, but *should* work
+	curl_setopt($ch, CURLOPT_PROXY, $proxy);
+	$response = curl_exec($ch);
+	curl_close ($ch);
+	return $response;
 }
