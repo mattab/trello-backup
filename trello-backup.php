@@ -37,15 +37,17 @@ if (strlen($application_token) < 30) {
 
 // Prepare proxy configuration if necessary
 $ctx = null;
+$context = array();
 if (!empty($proxy)) {
-    $aContext = array(
-        'http' => array(
-            'proxy' => 'tcp://' . $proxy,
-            'request_fullurl' => true
-        )
+    $context['http'] = array(
+        'proxy' => 'tcp://' . $proxy,
+        'request_fullurl' => true
     );
-    $ctx = stream_context_create($aContext);
 }
+
+// Force protocol to HTTP 1.1 to avoid error
+$context['http']['protocol_version'] = '1.1';
+$ctx = stream_context_create($context);
 
 // 1) Fetch all Trello Boards
 $application_token = trim($application_token);
