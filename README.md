@@ -56,6 +56,10 @@ Trello uses a paradigm for managing projects known as kanban, a method that had 
 
 Source: Trello on [Wikipedia](http://en.wikipedia.org/wiki/Trello)
 
+Revoking your Trello API Token after use
+---
+After backuping your Trello boards, you can easily revoke your token if you wish. Go to [trello.com/my/account](https://trello.com/my/account), scroll down to "Applications" and click "Revoke". See [this Trello help page](https://help.trello.com/article/1183-revoking-a-trello-token) for more info.
+
 Common Issues
 ---
 Fatal error: Maximum execution time of x seconds exceed in (Directory here). The simple fix here is to edit your php.ini file and set the max_execution_time attribute to 0 to allow your script to run as long as you need it to. 
