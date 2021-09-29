@@ -49,6 +49,16 @@ if (!empty($proxy)) {
 $context['http']['protocol_version'] = '1.1';
 $ctx = stream_context_create($context);
 
+// Prepare OAuth options for download of attachments
+$opts = array(
+    'http' => array(
+        'protocol_version' => '1.1',
+        'method' => 'GET',
+        'header' => "Authorization: OAuth oauth_consumer_key=\"$key\", oauth_token=\"$application_token\""
+    )
+    );
+$ctxb = stream_context_create($opts);
+
 // 1) Fetch all Trello Boards
 $application_token = trim($application_token);
 $url_boards = "https://api.trello.com/1/members/me/boards?&key=$key&token=$application_token";
@@ -154,7 +164,7 @@ foreach ($boards as $id => $board) {
             $i = 1;
             foreach ($attachments as $url => $name) {
                 $pathForAttachment = $dirname . '/' . sanitize_file_name($name);
-                file_put_contents($pathForAttachment, file_get_contents($url));
+                file_put_contents($pathForAttachment, file_get_contents($url, false, $ctxb));
                 echo "\t" . $i++ . ") " . $name . " in " . $pathForAttachment . "\n";
             }
         }
