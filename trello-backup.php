@@ -44,6 +44,8 @@ if (!empty($proxy)) {
         'request_fullurl' => true
     );
 }
+// pass the keys in via header to allow retrieval from S3
+$context['http']['header'] = "Authorization: OAuth oauth_consumer_key=\"$key\", oauth_token=\"$application_token\"";
 
 // Force protocol to HTTP 1.1 to avoid error
 $context['http']['protocol_version'] = '1.1';
@@ -154,7 +156,7 @@ foreach ($boards as $id => $board) {
             $i = 1;
             foreach ($attachments as $url => $name) {
                 $pathForAttachment = $dirname . '/' . sanitize_file_name($name);
-                file_put_contents($pathForAttachment, file_get_contents($url));
+                file_put_contents($pathForAttachment, file_get_contents($url, false, $ctx));
                 echo "\t" . $i++ . ") " . $name . " in " . $pathForAttachment . "\n";
             }
         }
