@@ -156,8 +156,26 @@ foreach ($boards as $id => $board) {
             $i = 1;
             foreach ($attachments as $url => $name) {
                 $pathForAttachment = $dirname . '/' . sanitize_file_name($name);
-                file_put_contents($pathForAttachment, file_get_contents($url, false, $ctx));
-                echo "\t" . $i++ . ") " . $name . " in " . $pathForAttachment . "\n";
+                echo "\t" . $i++ . ") " . $name . "\n";
+
+                # try without the extra auth headers for one type of URL, and with for another
+                echo "\t\t trying without extra auth headers...\n";
+                $contents = file_get_contents($url, false, $ctx);
+                if ($contents) {
+                    file_put_contents($pathForAttachment, $contents);
+                    echo "\t\t\t it worked. Putting in " . $pathForAttachment . "\n";
+                }
+                else {
+                    echo "\t\t Didn't work. Trying with extra auth headers...\n";
+                    $contents = file_get_contents($url);
+                    if ($contents) {
+                        file_put_contents($pathForAttachment, $contents);
+                        echo "\t\t\t it worked. Putting in " . $pathForAttachment . "\n";
+                    }
+                    else {
+                        echo "\t\t\t it didn't work either\n";
+                    }
+                }
             }
         }
     }
