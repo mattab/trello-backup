@@ -27,6 +27,7 @@ if(empty($timezone))
 date_default_timezone_set($timezone);
 
 // If the application_token looks incorrect we display help
+$application_token = trim($application_token);
 if (strlen($application_token) < 30) {
     // 0) Fetch the Application tokenn
     // Source: https://trello.com/docs/gettingstarted/index.html#getting-a-token-from-a-user
@@ -49,8 +50,20 @@ if (!empty($proxy)) {
 $context['http']['protocol_version'] = '1.1';
 $ctx = stream_context_create($context);
 
+$attachmentsCtx = null;
+$attachmentsContext = array();
+if (!empty($proxy)) {
+    $attachmentsContext['http'] = array(
+        'proxy' => 'tcp://' . $proxy,
+        'request_fullurl' => true
+    );
+}
+$attachmentsContext['http']['protocol_version'] = '1.1';
+$attachmentsContext['http']['header'] = array('Authorization: OAuth oauth_consumer_key="'.$key.'",oauth_token="'.$application_token.'"');
+$attachmentsCtx = stream_context_create($attachmentsContext);
+
+
 // 1) Fetch all Trello Boards
-$application_token = trim($application_token);
 $url_boards = "https://api.trello.com/1/members/me/boards?&key=$key&token=$application_token";
 $response = file_get_contents($url_boards, false, $ctx);
 if ($response === false) {
@@ -154,7 +167,7 @@ foreach ($boards as $id => $board) {
             $i = 1;
             foreach ($attachments as $url => $name) {
                 $pathForAttachment = $dirname . '/' . sanitize_file_name($name);
-                file_put_contents($pathForAttachment, file_get_contents($url));
+                file_put_contents($pathForAttachment, file_get_contents($url, false, $attachmentsCtx));
                 echo "\t" . $i++ . ") " . $name . " in " . $pathForAttachment . "\n";
             }
         }
