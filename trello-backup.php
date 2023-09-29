@@ -125,7 +125,16 @@ echo count($boards) . " boards to backup... \n";
 
 // 5) Backup now!
 foreach ($boards as $id => $board) {
-    $url_individual_board_json = "https://api.trello.com/1/boards/$id?actions=all&actions_limit=1000&card_attachment_fields=all&cards=all&lists=all&members=all&member_fields=all&card_attachment_fields=all&checklists=all&fields=all&key=$key&token=$application_token";
+    $url_individual_board_json = "https://api.trello.com/1/boards/$id?"
+        . "actions=all&actions_limit=1000"
+	. "&cards=all&lists=all&members=all&member_fields=all"
+	. "&card_members=all&checklists=all&fields=all"
+        . "&card_member_fields=all"
+        . "&card_attachments=true"
+        . "&card_attachment_fields=all"
+        . "&card_stickers=true"
+        . "&card_customFieldItems=true"
+        . "&key=$key&token=$application_token";
     $dirname = getPathToStoreBackups($path, $board, $filename_append_datetime);
     
     if(!file_exists($path)) {
@@ -152,9 +161,13 @@ foreach ($boards as $id => $board) {
     if($backup_attachments) {
         $trelloObject = json_decode($response);
         $attachments = array();
-        foreach ($trelloObject->actions as $member) {
-            if (isset($member->data->attachment->url)) {
-                $attachments[$member->data->attachment->url] = $member->data->attachment->id . '-' . $member->data->attachment->name;
+        foreach ($trelloObject->cards as $card) {
+            if (isset($card->attachments)) {
+                foreach ($card->attachments as $entry) {
+                    if (!empty($entry->isUpload)){
+                        $attachments[$entry->url] = $entry->id . '-' . $entry->name;
+                    }
+                }
             }
         }
 
